@@ -4,3 +4,67 @@ void hdwinit(void)
     DI();
     R_Systeminit();
 }
+
+RL78G14(80pin)I0map: Bit can be different from individual ports.TxD1 and RxD1 position may be up and down.
+PORT   BIT   timmer   serial    I2C    A/D    D/A            VT-TR           Address
+0       0
+0       1
+0       2              TxD1                                    
+0       3              RxD1
+0       4
+0       5
+0       6
+1       0
+1       1 
+1       2
+1       3               RxD2
+1       4               TxD2
+1       5
+1       6
+1       7
+2       0                                                     MODE       
+2       1                                                     UP
+2       2                                                     DOWN
+2       3                                                     LEFT              
+2       4                                                     RIGHT                                                              
+2       5                                                     SET
+2       6
+2       7
+
+BUTTOns:
+These button are attached to the Port-2 and bit-0 to bit-5.All the bit address are multiplied(&) by: 1(0x01),2(0x02),3(0x04),4(0x08),5(0x10),6(0x20)respectively.
+
+unsigned char before_opsw_id;
+void op_switich_in(void)
+{
+	unsigned char	opsw_id;	
+	opsw_id = op_swin_1d();	 
+
+	if (opsw_id != before_opsw_id){
+		if ((opsw_id & 0x01) == 0){
+			if ((before_opsw_id & 0x01) != 0) modef = 1;                           
+		};
+		if ((opsw_id & 0x02) == 0 && (before_opsw_id & 0x02) != 0) upf = 1;
+		if ((opsw_id & 0x04) == 0 && (before_opsw_id & 0x04) != 0) downf = 1;
+		if ((opsw_id & 0x08) == 0 && (before_opsw_id & 0x08) != 0) leftf = 1;
+		if ((opsw_id & 0x10) == 0 && (before_opsw_id & 0x10) != 0) rightf = 1;
+		if ((opsw_id & 0x20) == 0){
+			if ((before_opsw_id & 0x20) != 0) setf = 1;
+		}
+	}	
+	before_opsw_id = opsw_id;		
+}	
+
+//**********************************************************************
+unsigned char op_swin_1d(void)
+{
+	unsigned char swid;
+	
+	P0 = P0 | 0x20;		       //op_switch common on
+	delay_micro(100);	               //100microsec delay
+	swid = P2 & 0x3F;
+	P0 = P0 & 0xDF;		       //op_switch common off
+	
+	return swid;
+}
+//*
