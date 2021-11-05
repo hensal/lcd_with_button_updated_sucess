@@ -1,0 +1,6 @@
+When hardware initialization is called in two different places, the LCD displays before appearing could not appear.
+void hdwinit(void)
+{
+    DI();
+    R_Systeminit();
+}
