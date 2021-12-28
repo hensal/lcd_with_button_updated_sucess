@@ -32,7 +32,7 @@ PORT   BIT   timmer   serial    I2C    A/D    D/A            VT-TR           Add
 2       7
 
 BUTTOns:
-These button are attached to the Port-2 and bit-0 to bit-5.All the bit address are multiplied(&) by: 0(0x01),1(0x02),2(0x04),3(0x08),4(0x10),5(0x20)respectively.
+These button are attached to the Port-2 and bit-0 to bit-5.All the bit address are multiplied(&) by: 0(0x01),1(0x02),2(0x04),3(0x08),4(0x10),5(0x20),6(0x40),7(0x80)respectively.
 
 unsigned char before_opsw_id;
 void op_switich_in(void)
